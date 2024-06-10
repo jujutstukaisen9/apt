@@ -1,5 +1,5 @@
 name: Update M3U8 Playlist
-
+theme: minima
 on:
   schedule:
     - cron: '0 */2 * * *'
