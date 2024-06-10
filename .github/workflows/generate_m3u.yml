@@ -16,7 +16,7 @@ jobs:
           node-version: '20'
 
       - name: Install Dependencies
-        run: npm install node-fetch winston
+        run: npm install node-fetch@2 winston
 
       - name: Run Script
         run: node run.js
