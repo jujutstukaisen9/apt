@@ -28,4 +28,6 @@ jobs:
           git add ts.m3u
           git commit -m 'Update M3U8 playlist'
           git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.PAT }}
         
