@@ -47,7 +47,7 @@
         }
 
         async function setupPlayer() {
-            const m3uUrl = 'https://jcoding09.github.io/apt/ts.m3u';
+            const m3uUrl = 'https://raw.githubusercontent.com/jcoding09/apt/main/ts.m3u';
             const m3uData = await fetchM3UData(m3uUrl);
             const channels = parseM3U(m3uData);
 
