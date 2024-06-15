@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Streaming Channels</title>
+    <script src="https://cdn.jwplayer.com/libraries/SAHhwvZq.js"></script>
+</head>
+<body>
+    <div id="player"></div>
+
+    <script>
+        async function fetchM3UData(url) {
+            const response = await fetch(url);
+            const text = await response.text();
+            return text;
+        }
+
+        function parseM3U(data) {
+            const lines = data.split('\n');
+            const channels = [];
+            let channel = {};
+
+            lines.forEach(line => {
+                if (line.startsWith('#EXTINF:')) {
+                    const info = line.split(',')[1];
+                    channel.title = info;
+                } else if (line.startsWith('#KODIPROP:inputstream.adaptive.license_key=')) {
+                    const licenseKey = line.split('=')[1];
+                    channel.licenseKey = JSON.parse(licenseKey);
+                } else if (line.startsWith('#EXTHTTP:')) {
+                    const httpInfo = JSON.parse(line.split(':')[1]);
+                    channel.cookie = httpInfo.cookie;
+                } else if (line.startsWith('http')) {
+                    channel.file = line;
+                    channels.push({ ...channel });
+                    channel = {};
+                }
+            });
+
+            return channels.map(channel => ({
+                file: channel.file + '|cookie=' + channel.cookie,
+                title: channel.title,
+                license: channel.licenseKey,
+                image: channel.image || ''
+            }));
+        }
+
+        async function setupPlayer() {
+            const m3uUrl = 'https://jcoding09.github.io/apt/ts.m3u';
+            const m3uData = await fetchM3UData(m3uUrl);
+            const channels = parseM3U(m3uData);
+
+            jwplayer("player").setup({
+                playlist: channels,
+                primary: "html5",
+                autostart: false,
+                width: "100%",
+                aspectratio: "16:9"
+            });
+        }
+
+        setupPlayer();
+    </script>
+</body>
+</html>
