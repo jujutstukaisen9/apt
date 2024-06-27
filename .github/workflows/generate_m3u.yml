@@ -25,7 +25,7 @@ jobs:
 
       - name: Configure git user
         run: |
-          git config --global user.name 'jcoding09'
+          git config --global user.name 'jujutstukaisen9'
           git config --global user.email "${{ secrets.USER_EMAIL }}"
 
       - name: Commit and Push Changes
